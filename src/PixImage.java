@@ -324,17 +324,18 @@ public class PixImage {
         // how to get the x-gradient for one color
         if(neighbors[row][col] != null){
           // then you can do the multiplication
-
           totals[0] += kernel[row][col] * neighbors[row][col].getRed();
           totals[1] += kernel[row][col] * neighbors[row][col].getGreen();
           totals[2] += kernel[row][col] * neighbors[row][col].getBlue();
+
           Size = Size + 1;
-          totals[0] /= Size;
-          totals[1] /= Size;
-          totals[2] /= Size;
+
         }
       }
     }
+    totals[0] /= Size;
+    totals[1] /= Size;
+    totals[2] /= Size;
     return totals;
   }
 
@@ -354,33 +355,13 @@ public class PixImage {
 
         int[] xGrad = getGradient(neighbors, xGradient);
         int[] yGrad = getGradient(neighbors, yGradient);
-
       }
     }
 
-
-
-    // Replace the following line with your solution.
     return this;
     // Don't forget to use the method mag2gray() above to convert energies to
     // pixel intensities.
   }
-
-  private int[] getRedGradient(ArrayList<Pixel>neighbors, int x, int y){
-    int[][] xGradient = new int[][]{ {1, 0, -1},
-            {2, 0, -2},
-            {1, 0, -1}};
-    int[][] yGradient = new int[][] { {1, 2, 1},
-            {0, 0, 0},
-            {-1, -2, -1}};
-
-    for (int i = 0; i < neighbors.size(); i++) {
-
-    }
-
-    return new int[1];
-  }
-
 
   /**
    * TEST CODE:  YOU DO NOT NEED TO FILL IN ANY METHODS BELOW THIS POINT.
