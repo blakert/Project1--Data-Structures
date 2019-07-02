@@ -44,13 +44,15 @@ public class PixImage {
   }
 
   public PixImage(Pixel[][] pixelMap) {
-    // deep copy
+    // deep copy source image
     this.pixelMap = new Pixel[pixelMap.length][pixelMap[0].length];
     for(int i = 0; i < pixelMap.length; i++){
       for(int j = 0; j < pixelMap[i].length; j++){
         this.pixelMap[i][j] = new Pixel(pixelMap[i][j].getRed(),pixelMap[i][j].getGreen(),pixelMap[i][j].getBlue());
       }
     }
+    this.width = pixelMap.length;
+    this.height = pixelMap[0].length;
   }
 
   public Pixel[][] getPixelMap() {
@@ -143,29 +145,20 @@ public class PixImage {
    * @return a String representation of this PixImage.
    */
   public String toString() {
+    StringBuilder sb = new StringBuilder();
     // Replace the following line with your solution.
-    return "height: " + this.height + " width: " + this.height;
+    for(int i = 0; i < this.pixelMap.length; i++){
+      for(int j = 0; j < this.pixelMap[i].length; j++){
+        if( j == this.pixelMap[i].length - 1) {
+          sb.append(pixelMap[i][j].toString() + "\n");
+        } else {
+          sb.append(pixelMap[i][j].toString() + ", ");
+        }
+      }
+    }
+    return sb.toString();
+//    return "height: " + this.height + " width: " + this.height;
   }
-
-//  private boolean isCorner(int x, int y) {
-//    if (x == 0 && y == 0 ) return true;
-//    if (x == 0 && y == this.height - 1) return true;
-//    if (x == this.width - 1 && y == 0) return true;
-//    if (x == this.width - 1 && y == this.height - 1) return true;
-//    return false;
-//  }
-//
-//  private boolean isBorder(int x, int y) {
-//    // if height = 100 and width = 100, what is the border region. always starts in the corner at 0,0 -> if height is 0 or width is 0
-//    // or if height is max or if width is max
-//
-//    boolean xborder = x == 0 || x == this.width - 1;
-//    boolean yborder = y == 0 || y == this.height - 1;
-//
-//    if(yborder && xborder) return true;
-//    return false;
-//  }
-
 
 
   /**
@@ -237,9 +230,36 @@ public class PixImage {
 
     for(int i = 0; i < xcoords.length; i++){
       for(int j = 0; j < ycoords.length; j++){
+
         if((xcoords[i] < 0 || xcoords[i] >= this.pixelMap.length) || (ycoords[j] < 0 || ycoords[j] >= this.pixelMap[0].length)){
           continue;
         } else if(this.pixelMap[xcoords[i]][ycoords[j]] != null){
+          neighbors[i][j] = this.pixelMap[xcoords[i]][ycoords[j]].getPixel();
+        }
+      }
+    }
+    return neighbors;
+  }
+  private Pixel[][] getNeighborsReflection (int x, int y) {
+    Pixel[][] neighbors = new Pixel[3][3];
+    int[] xcoords = new int[] {x-1, x, x+1};
+    int[] ycoords = new int[] { y-1, y, y+1};
+
+
+    for(int i = 0; i < xcoords.length; i++){
+      for(int j = 0; j < ycoords.length; j++){
+        if (xcoords[i] < 0){
+          xcoords[i] = 0;
+        } else if (xcoords[i] >= this.width) {
+          xcoords[i] = this.width - 1;
+        }
+        if(ycoords[j] < 0){
+          ycoords[j] = 0;
+        } else if (ycoords[j] >= this.height) {
+          ycoords[j] = this.height - 1;
+        }
+
+        if(this.pixelMap[xcoords[i]][ycoords[j]] != null){
           neighbors[i][j] = this.pixelMap[xcoords[i]][ycoords[j]].getPixel();
         }
       }
@@ -333,9 +353,9 @@ public class PixImage {
         }
       }
     }
-    totals[0] /= Size;
-    totals[1] /= Size;
-    totals[2] /= Size;
+//    totals[0] /= Size;
+//    totals[1] /= Size;
+//    totals[2] /= Size;
     return totals;
   }
 
@@ -348,19 +368,24 @@ public class PixImage {
                                       {0, 0, 0},
                                       {-1, -2, -1}};
 
-    for (int i = 0; i < pixelMap.length;i++) {
-      for (int j = 0; j < pixelMap[0].length; j++) {
+    PixImage sobelEdgeImage = new PixImage(this.width,this.height);
 
-        Pixel[][] neighbors = getNeighbors(i,j);
+    for (int i = 0; i < this.width;i++) {
+      for (int j = 0; j < pixelMap[i].length; j++) {
+
+        Pixel[][] neighbors = getNeighborsReflection(i,j);
 
         int[] xGrad = getGradient(neighbors, xGradient);
         int[] yGrad = getGradient(neighbors, yGradient);
+        long energy = 0;
+        for (int count = 0; count < xGrad.length; count++) {
+          energy += ((long)xGrad[count] * (long)xGrad[count]) + ((long)yGrad[count] * (long)yGrad[count]);
+        }
+        short grayScaleIntensity = mag2gray(energy);
+        sobelEdgeImage.setPixel(i,j,grayScaleIntensity,grayScaleIntensity,grayScaleIntensity);
       }
     }
-
-    return this;
-    // Don't forget to use the method mag2gray() above to convert energies to
-    // pixel intensities.
+    return sobelEdgeImage;
   }
 
   /**

@@ -48,6 +48,6 @@ public class Pixel {
 
     @Override
     public String toString() {
-        return "red: " + this.red + " green: " + this.green + " blue: " + this.blue;
+        return "{ red: " + this.red + " green: " + this.green + " blue: " + this.blue + " }";
     }
 }
