@@ -36,9 +36,9 @@ public class RunIterator implements Iterator {
    *  Define any variables associated with a RunIterator object here.
    *  These variables MUST be private.
    */
-  DList<Run> runs;
-  Node currentNode;
-
+  private DList<Run> runs;
+  private Node<Run> currentNode;
+  private Node<Run> head;
 
   /**
    *  RunIterator() constructs a new iterator starting with a specified run.
@@ -54,8 +54,11 @@ public class RunIterator implements Iterator {
   // constructor that you want so that your RunLengthEncoding.iterator()
   // implementation can construct a RunIterator that points to the first run of
   // the encoding.
-  RunIterator(DList<Run> runs) {
+  RunIterator(DList<Run> runs, Node head) {
+
     this.runs = runs;
+    this.head = head;
+    this.currentNode = head.next;
     // Your solution here.  You may add parameters to the method signature.
   }
 
@@ -66,10 +69,8 @@ public class RunIterator implements Iterator {
    *  @return true if the iterator has more elements.
    */
   public boolean hasNext() {
-
-    if(currentNode.next != Runs.getHead())
-    // Replace the following line with your solution.
-    return false;
+      if(this.runs.isEmpty()) return false;
+      return currentNode.next != head;
   }
 
   /**
@@ -93,13 +94,21 @@ public class RunIterator implements Iterator {
    *  of your RunLengthEncoding data structure!  It must be freshly constructed
    *  for the sole purpose of returning four ints.
    */
-  public int[] next() {
-    // Construct a new array of 4 ints, fill in its values, and return it.
-    // Don't forget to advance the RunIterator's pointer so that the next
-    // call to next() will return the subsequent run.
+  public int[] next() throws NoSuchElementException {
+    try {
 
-    // Replace the following line with your solution.
-    return new int[4];
+      if(this.hasNext()){
+        Run nextRun = currentNode.next.getItem();
+        Pixel pix = nextRun.getPixData();
+        this.currentNode = currentNode.next;
+
+        return new int[] {nextRun.getNumTimes(), pix.getRed(), pix.getGreen(), pix.getBlue()};
+      } else {
+        throw new NoSuchElementException();
+      }
+    } catch (Exception e ) {
+      throw new NoSuchElementException();
+    }
   }
 
   /**

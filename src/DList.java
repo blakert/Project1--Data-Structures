@@ -1,40 +1,5 @@
 public class DList <T> {
-    class Node <T> {
-        Node next;
-        Node prev;
-        private T item;
 
-        Node(T item) {
-            this.item = item;
-            this.next = null;
-            this.prev = null;
-        }
-
-        Node() {
-            this.item = null;
-            this.next = null;
-            this.prev = null;
-        }
-
-        public T getItem() {
-            return item;
-        }
-        public void setItem(T item) {
-            this.item = item;
-        }
-        public Node getNext() {
-            return this.next;
-        }
-        public void setNext(Node next) {
-            this.next = next;
-        }
-        public Node getPrev() {
-            return this.prev;
-        }
-        public void setPrev (Node prev) {
-            this.prev = prev;
-        }
-    }
     private Node head;
     public long size;
 
@@ -43,6 +8,7 @@ public class DList <T> {
         head.next = head;
         head.prev = head;
         head.item = Integer.MIN_VALUE;
+        this.size = 0;
     }
 
     DList(T item) {
@@ -54,6 +20,7 @@ public class DList <T> {
 
         head.next.next = head;
         head.next.prev = head;
+        this.size = 1;
 
     }
 
@@ -64,7 +31,7 @@ public class DList <T> {
         head.next.prev = head;
         head.next.next = temp;
         temp.prev = head.next;
-        size++;
+        this.size++;
     }
 
     // remove front
@@ -73,7 +40,7 @@ public class DList <T> {
 
       head.next = head.next.next;
       head.next.prev = head;
-      size--;
+      this.size--;
     }
     // add back
     public void addBack (T item) {
@@ -81,5 +48,7 @@ public class DList <T> {
 
     }
     // remove back
-
+    public boolean isEmpty() {
+        return this.size == 0;
+    }
 }
