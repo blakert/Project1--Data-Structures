@@ -21,6 +21,7 @@
  *  See the README file accompanying this project for additional details.
  */
 
+
 import java.util.Iterator;
 
 public class RunLengthEncoding implements Iterable {
@@ -29,9 +30,9 @@ public class RunLengthEncoding implements Iterable {
    *  Define any variables associated with a RunLengthEncoding object here.
    *  These variables MUST be private.
    */
-
-
-
+    private int width;
+    private int height;
+    private DList<Run> encodedData;
 
   /**
    *  The following methods are required for Part II.
@@ -48,6 +49,14 @@ public class RunLengthEncoding implements Iterable {
 
   public RunLengthEncoding(int width, int height) {
     // Your solution here.
+    // length = width * height
+    long length = width * height;
+    this.height = height;
+    this.width = width;
+    encodedData = new DList<Run>();
+    for(int i = 0; i < length; i++){
+      // encodedData.addFront(new Pixel(0,0,0));
+    }
   }
 
   /**
@@ -72,7 +81,11 @@ public class RunLengthEncoding implements Iterable {
    */
 
   public RunLengthEncoding(int width, int height, int[] red, int[] green,
-                           int[] blue, int[] runLengths) {
+                           int[] blue, int[] runLengths){
+    this(width, height);
+    for(int i = 0; i < runLengths.length; i++) {
+
+    }
     // Your solution here.
   }
 
@@ -85,7 +98,7 @@ public class RunLengthEncoding implements Iterable {
 
   public int getWidth() {
     // Replace the following line with your solution.
-    return 1;
+    return width;
   }
 
   /**
@@ -96,7 +109,7 @@ public class RunLengthEncoding implements Iterable {
    */
   public int getHeight() {
     // Replace the following line with your solution.
-    return 1;
+    return height;
   }
 
   /**
@@ -121,7 +134,7 @@ public class RunLengthEncoding implements Iterable {
    */
   public PixImage toPixImage() {
     // Replace the following line with your solution.
-    return new PixImage(1, 1);
+    return new PixImage(width,height);
   }
 
   /**
@@ -135,7 +148,12 @@ public class RunLengthEncoding implements Iterable {
    */
   public String toString() {
     // Replace the following line with your solution.
-    return "";
+    StringBuilder sb  = new StringBuilder();
+    // while runtime iterator has next -> append runtime iterator yield.
+    for(int i = 0; i < width* height; i++){
+     // iterate through the run data with iterator
+    }
+    return "t";
   }
 
 
